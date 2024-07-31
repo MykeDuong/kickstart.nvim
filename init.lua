@@ -337,6 +337,13 @@ require('lazy').setup({
       -- used for completion, annotations and signatures of Neovim apis
       { 'folke/neodev.nvim', opts = {} },
     },
+    ops = {
+      setup = {
+        clangd = function(_, opts)
+          opts.capabilities.offsetEncoding = { 'utf-16' }
+        end,
+      },
+    },
     config = function()
       -- Brief Aside: **What is LSP?**
       --
@@ -458,7 +465,11 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        clangd = {
+          capabilities = {
+            offsetEncoding = { 'utf-16' },
+          },
+        },
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -727,6 +738,19 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
+  --[[
+  {
+    -- Copilot
+    'github/copilot.vim',
+    config = function()
+      vim.keymap.set('i', '<C-ac>', 'copilot#Accept("\\<CR>")', {
+        expr = true,
+        replace_keycodes = false,
+      })
+      vim.g.copilot_no_tab_map = true
+    end,
+  },
+--]]
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
