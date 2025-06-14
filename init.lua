@@ -9,7 +9,7 @@ vim.g.have_nerd_font = false
 vim.g.snacks_animate = false
 
 -- ssh copy
-vim.g.clipboard = 'osc52'
+-- vim.g.clipboard = 'osc52'
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
