@@ -3,7 +3,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- Remove animation from snacks
 vim.g.snacks_animate = false
@@ -913,19 +913,25 @@ require('lazy').setup({
     opts = {
       -- add any opts here
       -- for example
-      provider = 'claude',
-      openai = {
-        endpoint = 'https://api.openai.com/v1',
-        model = 'gpt-4o', -- your desired model (or use gpt-4o, etc.)
-        timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
-        temperature = 0,
-        --max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-        --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
-      },
-      claude = {
-        endpoint = "https://api.anthropic.com",
-        model = "claude-3-5-sonnet-20241022",
-        temperature = 0,
+      provider = "claude",
+      providers = {
+        openai = {
+          endpoint = 'https://api.openai.com/v1',
+          model = 'gpt-4o', -- your desired model (or use gpt-4o, etc.)
+          timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
+          -- extra_requests = {
+          --   temperature = 0,
+          -- },
+          --max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
+          --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+        },
+        claude = {
+          endpoint = "https://api.anthropic.com",
+          model = "claude-3-5-sonnet-20241022",
+          -- extra_requests = {
+          --   temperature = 0,
+          -- },
+        },
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
