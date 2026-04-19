@@ -652,6 +652,30 @@ require('lazy').setup({
             },
           },
         },
+
+        -- Basedpyright: Handles Logic, Types, and Navigation
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = 'openFilesOnly',
+                useLibraryCodeForTypes = true,
+                typeCheckingMode = 'standard', -- Professional-grade type checking
+                -- IMPORTANT: Disable diagnostics so Ruff can handle all linting
+                ignore = { '*' },
+              },
+            },
+          },
+        },
+
+        -- Ruff: Handles Google-style Linting and Formatting
+        ruff = {
+          on_attach = function(client)
+            -- Disable hover in favor of basedpyright
+            client.server_capabilities.hoverProvider = false
+          end,
+        },
       }
 
       -- Ensure the servers and tools above are installed
