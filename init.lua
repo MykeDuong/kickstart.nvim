@@ -697,20 +697,28 @@ require('lazy').setup({
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      -- Register each server's config via the native `vim.lsp.config` API
+      -- (merges with the default config nvim-lspconfig ships under `lsp/<name>.lua`,
+      -- which Neovim's runtime picks up automatically).
+      for server_name, server_opts in pairs(servers) do
+        server_opts.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server_opts.capabilities or {})
+        vim.lsp.config(server_name, server_opts)
+      end
+
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
+        automatic_enable = true, -- calls vim.lsp.enable() for installed servers automatically
       }
+
+      -- sourcekit-lsp (Swift/Objective-C) ships with Xcode itself, so Mason
+      -- can't manage it (it's not a separately downloadable, cross-platform
+      -- binary) and it never goes through mason-lspconfig's automatic_enable above.
+      -- Configure and enable it directly instead.
+      vim.lsp.config('sourcekit', {
+        capabilities = capabilities,
+      })
+      vim.lsp.enable 'sourcekit'
     end,
   },
 
